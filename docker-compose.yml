@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  hypothesis_technical_exercise:
+    container_name: hypothesis_technical_exercise
+    image: node:18.12-alpine
+    command: /bin/sh -c "cd /home/shlink/www && npm install && npm run start"
+    volumes:
+      - ./:/home/shlink/www
+    ports:
+      - "3000:3000"
