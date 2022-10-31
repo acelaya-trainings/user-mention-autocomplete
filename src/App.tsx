@@ -1,13 +1,12 @@
 import React from 'react';
-import './App.css';
 import { MentionTextArea } from './MentionTextArea';
 
 function App() {
   return (
     <div className="App">
       <section>
-        <p>Write a comment:</p>
-        <MentionTextArea />
+        <p className="text-center">Write a comment:</p>
+        <MentionTextArea loadDataSet={() => fetch('/users.json').then(res => res.json())} />
       </section>
     </div>
   );

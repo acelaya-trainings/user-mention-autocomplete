@@ -1,0 +1,39 @@
+.mention-text-area {
+    max-width: 50%;
+    margin: 0 auto;
+}
+
+.mention-text-area__content {
+    min-height: 10rem;
+    border: 1px solid #BD1C2B;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.mention-text-area__list {
+
+}
+
+.mention-text-area__list-item {
+    padding: .5rem;
+    cursor: pointer;
+}
+
+.mention-text-area__list-item:hover {
+    background-color: #BD1C2B;
+    color: white;
+}
+
+.mention-text-area__list-item--highlight {
+    font-weight: bold;
+}
+
+:not(:hover) .mention-text-area__list-item--highlight {
+    color: #BD1C2B;
+}
+
+.mention-text-area__list-avatar-img {
+    vertical-align: middle;
+    margin-right: .5rem;
+    max-width: 3rem;
+}
