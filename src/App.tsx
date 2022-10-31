@@ -1,12 +1,12 @@
 import React from 'react';
-import { MentionTextArea } from './comment-widget/MentionTextArea';
+import { TextArea } from './comment-widget/TextArea';
 
 function App() {
   return (
     <div className="App">
       <section>
         <p className="text-center">Comment widget:</p>
-        <MentionTextArea loadUsers={() => fetch('/users.json').then(res => res.json())} />
+        <TextArea loadUsers={() => fetch('/users.json').then(res => res.json())} />
       </section>
     </div>
   );

@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { User } from '../data';
-import './MentionTextArea.css';
 import { UsersDropdown } from './UsersDropdown';
+import './TextArea.css';
 
-interface MentionTextAreaProps {
+interface TextAreaProps {
   loadUsers: () => Promise<User[]>
 }
 
-export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadUsers }) => {
+export const TextArea: FC<TextAreaProps> = ({ loadUsers }) => {
   const [filteringText, setFilteringText] = useState<string>('')
   const [inMentioningMode, setInMentioningMode] = useState<boolean>(false);
   const [users, setUsers] = useState<User[] | undefined>()

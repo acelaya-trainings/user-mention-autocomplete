@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MentionTextArea } from './MentionTextArea';
+import { TextArea } from './TextArea';
 import { User } from '../data';
 
 const setUp = (loadUsers: () => Promise<User[]>) => ({
   user: userEvent.setup(),
-  ...render(<MentionTextArea loadUsers={loadUsers} />),
+  ...render(<TextArea loadUsers={loadUsers} />),
 })
 
 test('renders loading status in dropdown until users have been loaded', async () => {
