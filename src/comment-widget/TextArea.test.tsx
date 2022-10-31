@@ -94,3 +94,12 @@ test('dropdown comes and goes while text in the input changes', async () => {
   expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   assertUsers([], [/^User/, /^Foo Foo/, /^Contains user/, /^Bar Bar/, /^User2/, /^R is the first letter/]);
 });
+
+test('once a user is selected, filtering text is replaced with user\'s name', async () => {
+  const { user } = setUp(() => Promise.resolve(users));
+
+  await user.type(screen.getByPlaceholderText('Write a comment...'), 'I totally agree, @foo');
+  await user.click(screen.getByRole('menuitem', { name: /Foo Foo/ }));
+
+  expect(screen.getByPlaceholderText('Write a comment...')).toHaveValue('I totally agree, @Foo Foo');
+});

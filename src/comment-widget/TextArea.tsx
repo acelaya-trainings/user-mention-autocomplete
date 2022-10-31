@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { User } from '../data';
 import { UsersDropdown } from './UsersDropdown';
 import './TextArea.css';
@@ -8,9 +8,17 @@ interface TextAreaProps {
 }
 
 export const TextArea: FC<TextAreaProps> = ({ loadUsers }) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>();
   const [filteringText, setFilteringText] = useState<string>('')
   const [inMentioningMode, setInMentioningMode] = useState<boolean>(false);
   const [users, setUsers] = useState<User[] | undefined>()
+  const [textAreaValue, setTextAreaValue] = useState<string | undefined>();
+  const selectUser = (user: User) => {
+    setInMentioningMode(false);
+    setFilteringText('');
+    setTextAreaValue(textAreaValue?.replace(`@${filteringText}`, `@${user.name}`));
+    textAreaRef.current?.focus();
+  };
 
   useEffect(() => {
     loadUsers().then(setUsers);
@@ -23,30 +31,28 @@ export const TextArea: FC<TextAreaProps> = ({ loadUsers }) => {
         id="commentContainer"
         placeholder="Write a comment..."
         className="comment-widget-mention-text-area__content"
-        onKeyDown={(e) => {
-          const currentlyTypedChar = e.nativeEvent.key;
+        ref={(element) => {
+          textAreaRef.current = element ?? undefined;
+        }}
+        value={textAreaValue}
+        onKeyDown={({ nativeEvent }) => {
+          const { key: currentlyTypedChar } = nativeEvent;
 
           if (inMentioningMode) {
-            if (currentlyTypedChar === 'Backspace') {
-              if (filteringText.trim() === '') {
-                setInMentioningMode(false);
-              } else {
-                setFilteringText(`${filteringText}`.slice(0, -1));
-              }
-            } else {
-              setFilteringText(`${filteringText}${currentlyTypedChar}`.toLowerCase());
-            }
+            const backspaceTyped = currentlyTypedChar === 'Backspace';
+            // Disable mentioning mode once all text is removed
+            setInMentioningMode(!backspaceTyped || filteringText !== '');
+            setFilteringText(backspaceTyped ? `${filteringText}`.slice(0, -1) : `${filteringText}${currentlyTypedChar}`.toLowerCase());
           } else {
             setInMentioningMode(currentlyTypedChar === '@')
           }
         }}
-        // onChange={(e) => {
-        // }}
+        onChange={({ target }) => setTextAreaValue(target.value)}
       />
-      {filteringText.trim() !== '' && (
+      {filteringText !== '' && (
         <div className="comment-widget-mention-text-area__list">
           {users === undefined && 'Loading users...'}
-          {users && <UsersDropdown users={users} filteringText={filteringText} />}
+          {users && <UsersDropdown users={users} selectUser={selectUser} filteringText={filteringText} />}
         </div>
       )}
     </div>

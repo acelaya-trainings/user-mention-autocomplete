@@ -6,6 +6,7 @@ import { filterUsersByText } from './utils';
 interface UsersDropdownProps {
   users: User[];
   filteringText: string;
+  selectUser: (user: User) => void;
 }
 
 const HighlightText: FC<{ text: string, filteringText: string }> = ({ text, filteringText }) => (
@@ -20,7 +21,7 @@ const HighlightText: FC<{ text: string, filteringText: string }> = ({ text, filt
   </>
 )
 
-export const UsersDropdown: FC<UsersDropdownProps> = ({ users, filteringText }) => {
+export const UsersDropdown: FC<UsersDropdownProps> = ({ users, filteringText, selectUser }) => {
   return (
     <div role="menu">
       {filterUsersByText(users, filteringText).map(((user) => (
@@ -28,6 +29,7 @@ export const UsersDropdown: FC<UsersDropdownProps> = ({ users, filteringText }) 
           key={`${user.username}_${user.name}_${user.avatar_url}`}
           role="menuitem"
           className="comment-widget-users-dropdown__list-item"
+          onClick={() => selectUser(user)}
         >
           <img src={user.avatar_url} alt={`Avatar for user "${user.name}"`} className="comment-widget-users-dropdown__list-avatar-img" />
           <HighlightText text={user.name} filteringText={filteringText} /> (<HighlightText text={user.username} filteringText={filteringText} />)
