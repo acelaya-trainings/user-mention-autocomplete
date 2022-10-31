@@ -49,9 +49,7 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
           ].slice(0, 10).map((user => (
             <div key={user.username} className="mention-text-area__list-item">
               <img src={user.avatar_url} alt={`Avatar image for ${user.name}`} className="mention-text-area__list-avatar-img" />
-              <span style={{ display: 'flex' }}>
-                {highlightText(user.name, filteringText)} ({highlightText(user.username, filteringText)})
-              </span>
+              {highlightText(user.name, filteringText)} ({highlightText(user.username, filteringText)})
             </div>
           )))}
         </div>
