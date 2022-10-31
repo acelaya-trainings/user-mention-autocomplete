@@ -22,23 +22,44 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
   useEffect(() => {
     loadDataSet().then(setUsers);
   }, []);
+  useEffect(() => {
+    console.log(filteringText);
+  }, [filteringText])
 
   return (
     <div className="mention-text-area">
-      <div
+      <textarea
         className="mention-text-area__content"
-        contentEditable
-        onInput={({ nativeEvent }) => {
-          console.log(nativeEvent);
-          const currentlyTypedChar = (nativeEvent as any).data;
+        onKeyDown={(e) => {
+          const currentlyTypedChar = e.nativeEvent.key;
 
           if (lastTypedChar === '@') {
-            setFilteringText(`${filteringText}${currentlyTypedChar}`.toLowerCase());
+            if (currentlyTypedChar === 'Backspace') {
+              if (filteringText === '') {
+                setLastTypedChar(''); // "Disable" mentioning mode
+              } else {
+                setFilteringText(`${filteringText}`.slice(0, -1));
+              }
+            } else {
+              setFilteringText(`${filteringText}${currentlyTypedChar}`.toLowerCase());
+            }
             console.log('Writing after @');
           } else {
             setLastTypedChar(currentlyTypedChar)
           }
         }}
+        // onChange={(e) => {
+        //   const { nativeEvent } =  e;
+        //   // console.log(e, nativeEvent);
+        //   const currentlyTypedChar = (nativeEvent as any).data;
+        //
+        //   if (lastTypedChar === '@') {
+        //     setFilteringText(`${filteringText}${currentlyTypedChar}`.toLowerCase());
+        //     console.log('Writing after @');
+        //   } else {
+        //     setLastTypedChar(currentlyTypedChar)
+        //   }
+        // }}
       />
       {filteringText !== '' && (
         <div className="mention-text-area__list">
@@ -46,8 +67,8 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
           {users && [
             ...users.filter(({ name, username }) => name.toLowerCase().startsWith(filteringText) || username.toLowerCase().startsWith(filteringText)),
             ...users.filter(({ name, username }) => (!name.toLowerCase().startsWith(filteringText) && name.toLowerCase().includes(filteringText)) || (!username.toLowerCase().startsWith(filteringText)) && username.toLowerCase().includes(filteringText)),
-          ].slice(0, 10).map((user => (
-            <div key={user.username} className="mention-text-area__list-item">
+          ].slice(0, 10).map(((user, index) => (
+            <div key={`${user.username}_${index}`} className="mention-text-area__list-item">
               <img src={user.avatar_url} alt={`Avatar image for ${user.name}`} className="mention-text-area__list-avatar-img" />
               {highlightText(user.name, filteringText)} ({highlightText(user.username, filteringText)})
             </div>

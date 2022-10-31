@@ -8,6 +8,7 @@
     border: 1px solid #BD1C2B;
     padding: 10px;
     border-radius: 4px;
+    width: 100%;
 }
 
 .mention-text-area__list {
