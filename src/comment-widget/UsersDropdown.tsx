@@ -25,7 +25,7 @@ export const UsersDropdown: FC<UsersDropdownProps> = ({ users, filteringText }) 
       {[
         ...users.filter(({ name, username }) => name.toLowerCase().startsWith(filteringText) || username.toLowerCase().startsWith(filteringText)),
         ...users.filter(({ name, username }) => !name.toLowerCase().startsWith(filteringText) && !username.toLowerCase().startsWith(filteringText) && (name.toLowerCase().includes(filteringText) || username.toLowerCase().includes(filteringText))),
-      ].slice(0, 10).map(((user, index) => (
+      ].slice(0, 10).map(((user) => (
         <div
           key={`${user.username}_${user.name}_${user.avatar_url}`}
           role="menuitem"
