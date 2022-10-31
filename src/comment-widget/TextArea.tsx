@@ -4,19 +4,20 @@ import { UsersDropdown } from './UsersDropdown';
 import './TextArea.css';
 
 interface TextAreaProps {
-  loadUsers: () => Promise<User[]>
+  loadUsers: () => Promise<User[]>;
+  value: string;
+  onChange: (comment: string) => void;
 }
 
-export const TextArea: FC<TextAreaProps> = ({ loadUsers }) => {
+export const TextArea: FC<TextAreaProps> = ({ loadUsers, value, onChange }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>();
   const [filteringText, setFilteringText] = useState<string>('')
   const [inMentioningMode, setInMentioningMode] = useState<boolean>(false);
   const [users, setUsers] = useState<User[] | undefined>()
-  const [textAreaValue, setTextAreaValue] = useState<string | undefined>();
   const selectUser = (user: User) => {
     setInMentioningMode(false);
     setFilteringText('');
-    setTextAreaValue(textAreaValue?.replace(`@${filteringText}`, `@${user.name}`));
+    onChange(value.replace(`@${filteringText}`, `@${user.name}`));
     textAreaRef.current?.focus();
   };
 
@@ -34,12 +35,13 @@ export const TextArea: FC<TextAreaProps> = ({ loadUsers }) => {
         ref={(element) => {
           textAreaRef.current = element ?? undefined;
         }}
-        value={textAreaValue}
+        value={value}
         onKeyDown={({ nativeEvent }) => {
           const { key: currentlyTypedChar } = nativeEvent;
 
           if (inMentioningMode) {
             const backspaceTyped = currentlyTypedChar === 'Backspace';
+
             // Disable mentioning mode once all text is removed
             setInMentioningMode(!backspaceTyped || filteringText !== '');
             setFilteringText(backspaceTyped ? `${filteringText}`.slice(0, -1) : `${filteringText}${currentlyTypedChar}`.toLowerCase());
@@ -47,7 +49,7 @@ export const TextArea: FC<TextAreaProps> = ({ loadUsers }) => {
             setInMentioningMode(currentlyTypedChar === '@')
           }
         }}
-        onChange={({ target }) => setTextAreaValue(target.value)}
+        onChange={({ target }) => onChange(target.value)}
       />
       {filteringText !== '' && (
         <div className="comment-widget-mention-text-area__list">

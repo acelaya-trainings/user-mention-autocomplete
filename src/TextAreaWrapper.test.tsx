@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TextArea } from './TextArea';
-import { User } from '../data';
+import { User } from './data';
+import { TextAreaWrapper } from './TextAreaWrapper';
 
 const users: User[] = [
   {
@@ -39,7 +39,7 @@ const users: User[] = [
 
 const setUp = (loadUsers: () => Promise<User[]>) => ({
   user: userEvent.setup(),
-  ...render(<TextArea loadUsers={loadUsers} />),
+  ...render(<TextAreaWrapper loadUsers={loadUsers} />),
 })
 
 test('renders loading status in dropdown until users have been loaded', async () => {
