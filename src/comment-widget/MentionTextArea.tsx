@@ -4,24 +4,24 @@ import './MentionTextArea.css';
 import { UsersDropdown } from './UsersDropdown';
 
 interface MentionTextAreaProps {
-  loadDataSet: () => Promise<User[]>
+  loadUsers: () => Promise<User[]>
 }
 
-export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
+export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadUsers }) => {
   const [filteringText, setFilteringText] = useState<string>('')
   const [inMentioningMode, setInMentioningMode] = useState<boolean>(false);
   const [users, setUsers] = useState<User[] | undefined>()
 
   useEffect(() => {
-    loadDataSet().then(setUsers);
-  }, []);
-  useEffect(() => {
-    console.log(filteringText);
-  }, [filteringText])
+    loadUsers().then(setUsers);
+  }, [loadUsers]);
 
   return (
     <div className="comment-widget-mention-text-area">
+      <label htmlFor="commentContainer">Write a comment:</label>
       <textarea
+        id="commentContainer"
+        placeholder="Write a comment..."
         className="comment-widget-mention-text-area__content"
         onKeyDown={(e) => {
           const currentlyTypedChar = e.nativeEvent.key;
@@ -45,7 +45,7 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
       />
       {filteringText !== '' && (
         <div className="comment-widget-mention-text-area__list">
-          {!users && 'Loading users...'}
+          {users === undefined && 'Loading users...'}
           {users && <UsersDropdown users={users} filteringText={filteringText} />}
         </div>
       )}

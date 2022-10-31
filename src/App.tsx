@@ -5,8 +5,8 @@ function App() {
   return (
     <div className="App">
       <section>
-        <p className="text-center">Write a comment:</p>
-        <MentionTextArea loadDataSet={() => fetch('/users.json').then(res => res.json())} />
+        <p className="text-center">Comment widget:</p>
+        <MentionTextArea loadUsers={() => fetch('/users.json').then(res => res.json())} />
       </section>
     </div>
   );
