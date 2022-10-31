@@ -1,18 +1,11 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { User } from '../data';
 import './MentionTextArea.css';
-
-interface User {
-  username: string;
-  avatar_url: string;
-  name: string;
-}
+import { UsersDropdown } from './UsersDropdown';
 
 interface MentionTextAreaProps {
   loadDataSet: () => Promise<User[]>
 }
-
-const highlightText = (text: string, filteringText: string): ReactNode[] =>
-  text.split(filteringText).map((part, index, array) => array.length === index + 1 ? part : <>{part} <span className="mention-text-area__list-item--highlight">{filteringText}</span></>)
 
 export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
   const [filteringText, setFilteringText] = useState<string>('')
@@ -53,15 +46,7 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
       {filteringText !== '' && (
         <div className="mention-text-area__list">
           {!users && 'Loading users...'}
-          {users && [
-            ...users.filter(({ name, username }) => name.toLowerCase().startsWith(filteringText) || username.toLowerCase().startsWith(filteringText)),
-            ...users.filter(({ name, username }) => (!name.toLowerCase().startsWith(filteringText) && name.toLowerCase().includes(filteringText)) || (!username.toLowerCase().startsWith(filteringText)) && username.toLowerCase().includes(filteringText)),
-          ].slice(0, 10).map(((user, index) => (
-            <div key={`${user.username}_${index}`} className="mention-text-area__list-item">
-              <img src={user.avatar_url} alt={`Avatar image for ${user.name}`} className="mention-text-area__list-avatar-img" />
-              {highlightText(user.name, filteringText)} ({highlightText(user.username, filteringText)})
-            </div>
-          )))}
+          {users && <UsersDropdown users={users} filteringText={filteringText} />}
         </div>
       )}
     </div>
