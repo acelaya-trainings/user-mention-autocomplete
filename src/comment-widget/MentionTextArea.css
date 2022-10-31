@@ -1,9 +1,9 @@
-.mention-text-area {
+.comment-widget-mention-text-area {
     max-width: 50%;
     margin: 0 auto;
 }
 
-.mention-text-area__content {
+.comment-widget-mention-text-area__content {
     min-height: 10rem;
     border: 1px solid #BD1C2B;
     padding: 10px;
@@ -11,6 +11,6 @@
     width: 100%;
 }
 
-.mention-text-area__list {
+.comment-widget-mention-text-area__list {
 
 }

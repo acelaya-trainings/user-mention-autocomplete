@@ -20,9 +20,9 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
   }, [filteringText])
 
   return (
-    <div className="mention-text-area">
+    <div className="comment-widget-mention-text-area">
       <textarea
-        className="mention-text-area__content"
+        className="comment-widget-mention-text-area__content"
         onKeyDown={(e) => {
           const currentlyTypedChar = e.nativeEvent.key;
 
@@ -44,7 +44,7 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
         // }}
       />
       {filteringText !== '' && (
-        <div className="mention-text-area__list">
+        <div className="comment-widget-mention-text-area__list">
           {!users && 'Loading users...'}
           {users && <UsersDropdown users={users} filteringText={filteringText} />}
         </div>

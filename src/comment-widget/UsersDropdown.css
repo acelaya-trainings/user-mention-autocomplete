@@ -1,0 +1,23 @@
+.comment-widget-users-dropdown__list-item {
+    padding: .5rem;
+    cursor: pointer;
+}
+
+.comment-widget-users-dropdown__list-item:hover {
+    background-color: #BD1C2B;
+    color: white;
+}
+
+.comment-widget-users-dropdown__list-item--highlight {
+    font-weight: bold;
+}
+
+:not(:hover) .comment-widget-users-dropdown__list-item--highlight {
+    color: #BD1C2B;
+}
+
+.comment-widget-users-dropdown__list-avatar-img {
+    vertical-align: middle;
+    margin-right: .5rem;
+    max-width: 2.5rem;
+}

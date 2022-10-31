@@ -1,5 +1,5 @@
 import React from 'react';
-import { MentionTextArea } from './comments-widget/MentionTextArea';
+import { MentionTextArea } from './comment-widget/MentionTextArea';
 
 function App() {
   return (
