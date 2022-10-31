@@ -1,15 +1,15 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { User } from '../data';
 import { UsersDropdown } from './UsersDropdown';
-import './TextArea.css';
+import './CommentBox.css';
 
-interface TextAreaProps {
+interface CommentBoxProps {
   loadUsers: () => Promise<User[]>;
   value: string;
   onChange: (comment: string) => void;
 }
 
-export const TextArea: FC<TextAreaProps> = ({ loadUsers, value, onChange }) => {
+export const CommentBox: FC<CommentBoxProps> = ({ loadUsers, value, onChange }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>();
   const [filteringText, setFilteringText] = useState<string>('')
   const [inMentioningMode, setInMentioningMode] = useState<boolean>(false);

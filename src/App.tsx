@@ -1,12 +1,12 @@
 import React from 'react';
-import { TextAreaWrapper } from './TextAreaWrapper';
+import { CommentBoxWrapper } from './CommentBoxWrapper';
 
 function App() {
   return (
     <div className="App">
       <section>
         <p className="text-center">Comment widget:</p>
-        <TextAreaWrapper loadUsers={() => fetch('/users.json').then(res => res.json())} />
+        <CommentBoxWrapper loadUsers={() => fetch('/users.json').then(res => res.json())} />
       </section>
     </div>
   );

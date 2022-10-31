@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { User } from './data';
-import { TextAreaWrapper } from './TextAreaWrapper';
+import { CommentBoxWrapper } from './CommentBoxWrapper';
 
 const users: User[] = [
   {
@@ -39,7 +39,7 @@ const users: User[] = [
 
 const setUp = (loadUsers: () => Promise<User[]>) => ({
   user: userEvent.setup(),
-  ...render(<TextAreaWrapper loadUsers={loadUsers} />),
+  ...render(<CommentBoxWrapper loadUsers={loadUsers} />),
 })
 
 test('renders loading status in dropdown until users have been loaded', async () => {
