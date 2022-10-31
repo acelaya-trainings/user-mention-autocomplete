@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# User mention autocomplete
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Example application which includes a comment box component, which captures mentions to users via `@`, like on Twitter, GitHub, Atlassian tools, etc.
 
-## Available Scripts
+When that character is typed, the component suggests users matching the text coming next, and one of them can be selected and automatically inserted in the comment.
 
-In the project directory, you can run:
+## Start project
 
-### `npm start`
+The project uses react to avoid reinventing the wheel in some basic aspects, and then provides the custom functionality on top of it.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The project provides a `docker-compose.yml` file to ease starting it.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* Install docker and docker-compose.
+* Run `docker-compose up`.
+* Open http://localhost:3000 in a modern browser.
 
-### `npm test`
+## Run tests
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Tests are collocated inside `src`, next to the modules they test.
 
-### `npm run build`
+For react components, the tests use `@testing-library/react`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Run the tests with `npm run test` (or inside the running docker container with `./indocker npm run test`).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Using the component
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The component is part of the project for simplicity, but everything inside `src/comment-widget` is agnostic to the app and could be exposed as a library of its own.
 
-### `npm run eject`
+```tsx
+import { CommentBox } from './comments-widget/CommentBox';
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+// [...]
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const [textAreaValue, setTextAreaValue] = useState<string>('');
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+return (
+  <CommentBox
+    value={textAreaValue}
+    onChange={setTextAreaValue}
+    loadUsers={() => fetch('/users.json').then((res) => res.json())}
+  />
+);
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Missing nice-to-haves
 
-## Learn More
+Some features have been neglected, but could be improved with some extra time:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+* Use a nicer UI. The component is based on a simple `textarea`. Some other type of element with `contenteditable` would allow displaying selected users in a nicer way (different color, background, etc). This example just displays the name of the user in quotes once selected.
+* The users dropdown appears always under the textarea. Ideally it should appear right under the caret.
+* This component considers it's in "search mode" while writing text after a `@` has been typed. If the `Backspace` is "typed", it resets the search and eventually gois out of "search mode" once the `@` is erased. However, it does not consider the `del` key, selecting all the text + `Backspace` or other combinations.
+* Users in the list can only be selected via mouse click. Ideally it should allow focusing on the list, switching active user via up/down arrows, and selecting via `Enter`.

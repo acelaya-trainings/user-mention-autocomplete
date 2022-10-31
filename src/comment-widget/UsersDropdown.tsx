@@ -14,7 +14,9 @@ const HighlightText: FC<{ text: string, filteringText: string }> = ({ text, filt
     {text.split(filteringText).map(
       (part, index, array) => (
         <Fragment key={`${part}_${index}`}>
-          {array.length === index + 1 ? part : <>{part} <span className="comment-widget-users-dropdown__list-item--highlight">{filteringText}</span></>}
+          {array.length === index + 1
+            ? part
+            : <>{part} <span className="comment-widget-users-dropdown__list-item--highlight">{filteringText}</span></>}
         </Fragment>
       )
     )}

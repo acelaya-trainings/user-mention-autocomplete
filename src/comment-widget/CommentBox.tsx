@@ -17,7 +17,7 @@ export const CommentBox: FC<CommentBoxProps> = ({ loadUsers, value, onChange }) 
   const selectUser = (user: User) => {
     setInMentioningMode(false);
     setFilteringText('');
-    onChange(value.replace(`@${filteringText}`, `@${user.name}`));
+    onChange(value.replace(`@${filteringText}`, `"@${user.name}"`));
     textAreaRef.current?.focus();
   };
 
