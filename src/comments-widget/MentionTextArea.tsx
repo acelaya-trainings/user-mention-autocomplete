@@ -15,8 +15,8 @@ const highlightText = (text: string, filteringText: string): ReactNode[] =>
   text.split(filteringText).map((part, index, array) => array.length === index + 1 ? part : <>{part} <span className="mention-text-area__list-item--highlight">{filteringText}</span></>)
 
 export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
-  const [lastTypedChar, setLastTypedChar] = useState<string | null | undefined>();
   const [filteringText, setFilteringText] = useState<string>('')
+  const [inMentioningMode, setInMentioningMode] = useState<boolean>(false);
   const [users, setUsers] = useState<User[] | undefined>()
 
   useEffect(() => {
@@ -33,32 +33,21 @@ export const MentionTextArea: FC<MentionTextAreaProps> = ({ loadDataSet }) => {
         onKeyDown={(e) => {
           const currentlyTypedChar = e.nativeEvent.key;
 
-          if (lastTypedChar === '@') {
+          if (inMentioningMode) {
             if (currentlyTypedChar === 'Backspace') {
-              if (filteringText === '') {
-                setLastTypedChar(''); // "Disable" mentioning mode
+              if (filteringText.trim() === '') {
+                setInMentioningMode(false);
               } else {
                 setFilteringText(`${filteringText}`.slice(0, -1));
               }
             } else {
               setFilteringText(`${filteringText}${currentlyTypedChar}`.toLowerCase());
             }
-            console.log('Writing after @');
           } else {
-            setLastTypedChar(currentlyTypedChar)
+            setInMentioningMode(currentlyTypedChar === '@')
           }
         }}
         // onChange={(e) => {
-        //   const { nativeEvent } =  e;
-        //   // console.log(e, nativeEvent);
-        //   const currentlyTypedChar = (nativeEvent as any).data;
-        //
-        //   if (lastTypedChar === '@') {
-        //     setFilteringText(`${filteringText}${currentlyTypedChar}`.toLowerCase());
-        //     console.log('Writing after @');
-        //   } else {
-        //     setLastTypedChar(currentlyTypedChar)
-        //   }
         // }}
       />
       {filteringText !== '' && (
