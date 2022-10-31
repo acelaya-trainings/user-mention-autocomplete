@@ -43,7 +43,7 @@ export const TextArea: FC<TextAreaProps> = ({ loadUsers }) => {
         // onChange={(e) => {
         // }}
       />
-      {filteringText !== '' && (
+      {filteringText.trim() !== '' && (
         <div className="comment-widget-mention-text-area__list">
           {users === undefined && 'Loading users...'}
           {users && <UsersDropdown users={users} filteringText={filteringText} />}

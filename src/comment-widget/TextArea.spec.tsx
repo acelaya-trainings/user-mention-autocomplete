@@ -64,3 +64,33 @@ test.each([
     expect(images[index]).toHaveAttribute('alt', expect.stringContaining(`"${user}"`));
   });
 });
+
+test('dropdown comes and goes while text in the input changes', async () => {
+  const { user } = setUp(() => Promise.resolve(users));
+  const assertUsers = (matchingUsers: RegExp[], nonMatchingUsers: RegExp[]) => {
+    matchingUsers.forEach((name) => expect(screen.getByRole('menuitem', { name })).toBeInTheDocument());
+    nonMatchingUsers.forEach((name) => expect(screen.queryByRole('menuitem', { name })).not.toBeInTheDocument());
+  };
+
+  expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  assertUsers([], [/^User/, /^Foo Foo/, /^Contains user/, /^Bar Bar/, /^User2/, /^R is the first letter/]);
+
+  await user.type(screen.getByPlaceholderText('Write a comment...'), 'no mention');
+  expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  assertUsers([], [/^User/, /^Foo Foo/, /^Contains user/, /^Bar Bar/, /^User2/, /^R is the first letter/]);
+
+  await user.type(screen.getByPlaceholderText('Write a comment...'), '@');
+  assertUsers([], [/^User/, /^Foo Foo/, /^Contains user/, /^Bar Bar/, /^User2/, /^R is the first letter/]);
+
+  await user.type(screen.getByPlaceholderText('Write a comment...'), 'r2');
+  expect(screen.getByRole('menu')).toBeInTheDocument();
+  assertUsers([/User2/], [/^User/, /^Foo Foo/, /^Contains user/, /^Bar Bar/, /^R is the first letter/]);
+
+  await user.type(screen.getByPlaceholderText('Write a comment...'), '{Backspace}');
+  expect(screen.getByRole('menu')).toBeInTheDocument();
+  assertUsers([/User2/, /User(?!2)/, /Contains user/, /Bar Bar/, /R is the first letter/], [/^Foo Foo/]);
+
+  await user.type(screen.getByPlaceholderText('Write a comment...'), '{Backspace}{Backspace}');
+  expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+  assertUsers([], [/^User/, /^Foo Foo/, /^Contains user/, /^Bar Bar/, /^User2/, /^R is the first letter/]);
+});
